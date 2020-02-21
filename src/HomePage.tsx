@@ -4,13 +4,6 @@ import getCharacters from "../domains/getCharacters";
 import CharacterList from "../components/CharacterList";
 
 
-type Info = {
-    count: number;
-    pages: number;
-    next: string;
-    prev: string;
-};
-
 type Character = {
     id: number;
     name: string;
@@ -21,19 +14,14 @@ type Character = {
     created: string;
 };
 
-type Characters = {
-    info: Info;
-    results: Array<Character>;
-};
-
 const HomePage = ({navigation}) => {
-    const [characters, setCharacters] = React.useState<Characters>();
+    const [characters, setCharacters] = React.useState<Array<Character>>([]);
     const [page, setPage] = React.useState(1);
 
     React.useEffect(() => {
         getCharacters(page)
             .then(data => {
-                setCharacters(data);
+                setCharacters(characters?.concat(data.results));
             })
     }, [page]);
 
@@ -42,11 +30,12 @@ const HomePage = ({navigation}) => {
             <StatusBar barStyle="dark-content"/>
             <SafeAreaView>
                 <FlatList
+                    style={styles.flatList}
                     onEndReached={() => {
                         setPage(page + 1)
                     }}
-                    onEndReachedThreshold={0.1}
-                    data={characters?.results}
+                    onEndReachedThreshold={0.5}
+                    data={characters}
                     renderItem={({item}: { item: Character }) => (
                         <CharacterList character={item} onBtnDetailClick={() => {
                             /* 1. Navigate to the Details route with params */
@@ -55,6 +44,8 @@ const HomePage = ({navigation}) => {
                             });
                         }}/>
                     )}
+                    numColumns={2}
+                    horizontal={false}
 
                 />
             </SafeAreaView>
@@ -62,5 +53,11 @@ const HomePage = ({navigation}) => {
     )
         ;
 };
+
+const styles = StyleSheet.create({
+    flatList: {
+        margin: 10
+    }
+});
 
 export default HomePage;

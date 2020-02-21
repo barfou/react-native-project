@@ -17,7 +17,7 @@ const CharacterList: React.FC<CharacterListProps> = CharacterListProps => {
     return (
         <TouchableOpacity onPress={CharacterListProps.onBtnDetailClick}>
             <View style={styles.item}>
-                <Image style={{width: 50, height: 50}} source={{uri: CharacterListProps.character.image}}/>
+                <Image style={styles.img} source={{uri: CharacterListProps.character.image}}/>
                 <Text style={styles.title}>{CharacterListProps.character.name}</Text>
             </View>
         </TouchableOpacity>
@@ -30,13 +30,23 @@ const styles = StyleSheet.create({
         padding: 10,
         marginVertical: 4,
         marginHorizontal: 8,
-      flexDirection: 'row',
-      flex: 1,
+        flexDirection: 'row',
+        flex: 1,
+        borderRadius: 10,
+        //Pas optimal
+        width: 150
     },
     title: {
         fontSize: 12,
         alignSelf: 'center',
         marginStart: 10,
+        //Pas optimal
+        width: 75
+    },
+    img: {
+        width: 50,
+        height: 50,
+        borderRadius: 4
     },
 });
 
