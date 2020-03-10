@@ -13,12 +13,24 @@ import getCharacter from '../domains/getCharacter';
 
 import CharacterDetails from '../components/CharacterDetails'
 
+type Origin = {
+    name: string;
+    url: string;
+};
+
+type Location = {
+    name: string;
+    url: string;
+};
+
 type Character = {
     id: number;
     name: string;
     status: string;
     species: string;
     gender: string;
+    origin: Origin;
+    location: Location;
     image: string;
     created: string;
 };
@@ -45,7 +57,6 @@ const DetailsPage = ({route}) => {
         <>
             <StatusBar barStyle="dark-content"/>
             <View style={styles.body}>
-                <Text>Character Details Screen</Text>
                 {character ? (
                     <CharacterDetails character={character}/>
                 ) : (
@@ -61,35 +72,9 @@ const DetailsPage = ({route}) => {
 };
 
 const styles = StyleSheet.create({
-    header: {
-        backgroundColor: '#E9E9E9',
-        padding: 10,
-    },
-    scrollView: {
-        backgroundColor: Colors.lighter,
-    },
     body: {
         alignItems: 'center',
-        marginTop: 10,
-    },
-    button: {
-        width: 150,
-        height: 30,
-        margin: 5,
-        backgroundColor: '#A5A4AA',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    characterContainer: {
-        backgroundColor: '#E0E0E0',
-        margin: 10,
-        padding: 10,
-        borderRadius: 10,
+        flex: 1
     },
 });
 

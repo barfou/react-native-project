@@ -1,7 +1,20 @@
 import * as React from "react";
-import {Button, FlatList, Image, SafeAreaView, StatusBar, StyleSheet, Text, View, ToastAndroid} from "react-native";
-import getCharacters from "../domains/getCharacters";
+import {
+    Button,
+    FlatList,
+    Image,
+    SafeAreaView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    View,
+    ToastAndroid,
+    Dimensions
+} from "react-native";
+//import getCharacters from "../domains/getCharacters";
 import CharacterList from "../components/CharacterList";
+import SearchBar from "../components/SearchBar";
+import getCharactersSearch from "../domains/getCharactersSearch";
 
 
 type Character = {
@@ -17,18 +30,33 @@ type Character = {
 const HomePage = ({navigation}) => {
     const [characters, setCharacters] = React.useState<Array<Character>>([]);
     const [page, setPage] = React.useState(1);
+    const [search, setSearch] = React.useState('');
+    //const [loading, setLoading] = React.useState(false)
 
     React.useEffect(() => {
-        getCharacters(page)
+        let cancel = false
+        //setLoading(true)
+        getCharactersSearch(search, page)
             .then(data => {
-                setCharacters(characters?.concat(data.results));
+                if (!cancel) {
+                    setCharacters(characters?.concat(data.results));
+                    //setLoading(false)
+                }
             })
-    }, [page]);
+        return () => {
+            cancel = true
+        }
+    }, [search, page]);
 
     return (
         <>
             <StatusBar barStyle="dark-content"/>
-            <SafeAreaView>
+            <SafeAreaView style={styles.background}>
+                <SearchBar
+                    onChangeText={str => {
+                        setSearch(str), setPage(1), setCharacters([]);
+                    }}
+                />
                 <FlatList
                     style={styles.flatList}
                     onEndReached={() => {
@@ -46,17 +74,19 @@ const HomePage = ({navigation}) => {
                     )}
                     numColumns={2}
                     horizontal={false}
-
                 />
             </SafeAreaView>
         </>
-    )
-        ;
+    );
 };
 
 const styles = StyleSheet.create({
     flatList: {
-        margin: 10
+        margin: 10,
+    },
+    background: {
+        backgroundColor: '#202329',
+        flex: 1,
     }
 });
 

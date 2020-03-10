@@ -1,10 +1,13 @@
 import * as React from 'react';
 
-type Info = {
-    count: number;
-    pages: number;
-    next: string;
-    prev: string;
+type Origin = {
+    name: string;
+    url: string;
+};
+
+type Location = {
+    name: string;
+    url: string;
 };
 
 type Character = {
@@ -13,6 +16,8 @@ type Character = {
     status: string;
     species: string;
     gender: string;
+    origin: Origin;
+    location: Location;
     image: string;
     created: string;
 };

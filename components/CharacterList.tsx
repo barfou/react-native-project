@@ -1,12 +1,15 @@
 import * as React from 'react';
 
-import {Button, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Button, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 type Character = {
     id: number;
     name: string;
     image: string;
 };
+const {height, width} = Dimensions.get('window');
+const itemWidth = (width - 50) / 2;
+const itemHeight = (height) / 4;
 
 export type CharacterListProps = {
     character: Character;
@@ -18,7 +21,9 @@ const CharacterList: React.FC<CharacterListProps> = CharacterListProps => {
         <TouchableOpacity onPress={CharacterListProps.onBtnDetailClick}>
             <View style={styles.item}>
                 <Image style={styles.img} source={{uri: CharacterListProps.character.image}}/>
-                <Text style={styles.title}>{CharacterListProps.character.name}</Text>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>{CharacterListProps.character.name}</Text>
+                </View>
             </View>
         </TouchableOpacity>
     );
@@ -26,26 +31,30 @@ const CharacterList: React.FC<CharacterListProps> = CharacterListProps => {
 
 const styles = StyleSheet.create({
     item: {
-        backgroundColor: '#e9e9e9',
-        padding: 10,
         marginVertical: 4,
         marginHorizontal: 8,
-        flexDirection: 'row',
-        flex: 1,
-        borderRadius: 10,
-        //Pas optimal
-        width: 150
+        width: itemWidth,
+        height: itemHeight
+    },
+    titleContainer: {
+        backgroundColor: '#222222',
+        padding: 10,
+        opacity: 0.75,
+        borderBottomLeftRadius: 4,
+        borderBottomRightRadius: 4,
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0
     },
     title: {
         fontSize: 12,
         alignSelf: 'center',
-        marginStart: 10,
-        //Pas optimal
-        width: 75
+        color: '#FFFFFF'
     },
     img: {
-        width: 50,
-        height: 50,
+        width: itemWidth,
+        height: itemHeight,
         borderRadius: 4
     },
 });
