@@ -20,10 +20,11 @@ type Character = {
     location: Location;
     image: string;
     created: string;
+    url: string;
 };
 
-const getCharacter = (id: number | string) =>
-    fetch(`https://rickandmortyapi.com/api/character/${id}`, {
+const getCharacter = (url: string) =>
+    fetch(url, {
         headers: {Accept: 'application/json'},
     }).then<Character>(res => {
         if (!res.ok) {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Dimensions, Image, StyleSheet, Text, View} from "react-native";
+import {Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 
 type Origin = {
     name: string;
@@ -27,37 +27,47 @@ const {height, width} = Dimensions.get('window');
 const imgWidth = width;
 const itemHeight = height / 2;
 
-const CharacterDetails = ({character}: { character: CharacterDetails }) => {
+export type CharacterDetailsProps = {
+    character: CharacterDetails;
+    onLocationClick: () => void;
+    onOriginClick: () => void;
+}
+
+const CharacterDetails: React.FC<CharacterDetailsProps> = CharacterDetailsProps => {
     return (
         <View style={styles.body}>
             <View>
-                <Image style={styles.img} source={{uri: character.image}}/>
+                <Image style={styles.img} source={{uri: CharacterDetailsProps.character.image}}/>
                 <View style={styles.firstInfosContainer}>
-                    <Text style={styles.textFirstInfosName}>{character.name}</Text>
-                    <Text style={styles.textFirstInfos}>Id: {character.id}</Text>
-                    <Text style={styles.textFirstInfos}>Created : {character.created}</Text>
+                    <Text style={styles.textFirstInfosName}>{CharacterDetailsProps.character.name}</Text>
+                    <Text style={styles.textFirstInfos}>Id: {CharacterDetailsProps.character.id}</Text>
+                    <Text style={styles.textFirstInfos}>Created : {CharacterDetailsProps.character.created}</Text>
                 </View>
             </View>
             <View style={styles.infosContainer}>
                 <View style={styles.containerWithBottomline}>
                     <Text style={styles.textLeft}>Status :</Text>
-                    <Text style={styles.textRight}>{character.status}</Text>
+                    <Text style={styles.textRight}>{CharacterDetailsProps.character.status}</Text>
                 </View>
                 <View style={styles.containerWithBottomline}>
                     <Text style={styles.textLeft}>Species :</Text>
-                    <Text style={styles.textRight}>{character.species}</Text>
+                    <Text style={styles.textRight}>{CharacterDetailsProps.character.species}</Text>
                 </View>
                 <View style={styles.containerWithBottomline}>
                     <Text style={styles.textLeft}>Gender :</Text>
-                    <Text style={styles.textRight}>{character.gender}</Text>
+                    <Text style={styles.textRight}>{CharacterDetailsProps.character.gender}</Text>
                 </View>
                 <View style={styles.containerWithBottomline}>
                     <Text style={styles.textLeft}>Origin :</Text>
-                    <Text style={styles.textRight}>{character.origin.name}</Text>
+                    <TouchableOpacity onPress={CharacterDetailsProps.onLocationClick}>
+                        <Text style={styles.textRightClickable}>{CharacterDetailsProps.character.origin.name}</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.containerWithBottomline}>
                     <Text style={styles.textLeft}>Last Location :</Text>
-                    <Text style={styles.textRight}>{character.location.name}</Text>
+                    <TouchableOpacity onPress={CharacterDetailsProps.onLocationClick}>
+                        <Text style={styles.textRightClickable}>{CharacterDetailsProps.character.location.name}</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
@@ -99,6 +109,10 @@ const styles = StyleSheet.create({
     },
     textRight: {
         color: '#ff9800',
+    },
+    textRightClickable: {
+        color: '#ff9800',
+        textDecorationLine: 'underline'
     },
     containerWithBottomline: {
         borderBottomColor: '#DDDDDD',

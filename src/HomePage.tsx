@@ -1,32 +1,24 @@
 import * as React from "react";
 import {
-    Button,
     FlatList,
-    Image,
     SafeAreaView,
     StatusBar,
     StyleSheet,
-    Text,
-    View,
-    ToastAndroid,
-    Dimensions
 } from "react-native";
-//import getCharacters from "../domains/getCharacters";
+
 import CharacterList from "../components/CharacterList";
 import SearchBar from "../components/SearchBar";
-import getCharactersSearch from "../domains/getCharactersSearch";
+import getCharacters from "../domains/getCharacters";
 
 
 type Character = {
     id: number;
     name: string;
-    status: string;
-    species: string;
-    gender: string;
     image: string;
-    created: string;
+    url: string;
 };
 
+// @ts-ignore
 const HomePage = ({navigation}) => {
     const [characters, setCharacters] = React.useState<Array<Character>>([]);
     const [page, setPage] = React.useState(1);
@@ -36,7 +28,7 @@ const HomePage = ({navigation}) => {
     React.useEffect(() => {
         let cancel = false
         //setLoading(true)
-        getCharactersSearch(search, page)
+        getCharacters(search, page)
             .then(data => {
                 if (!cancel) {
                     setCharacters(characters?.concat(data.results));
@@ -65,12 +57,15 @@ const HomePage = ({navigation}) => {
                     onEndReachedThreshold={0.5}
                     data={characters}
                     renderItem={({item}: { item: Character }) => (
-                        <CharacterList character={item} onBtnDetailClick={() => {
-                            /* 1. Navigate to the Details route with params */
-                            navigation.navigate('Details', {
-                                itemId: `${item.id}`
-                            });
-                        }}/>
+                        <CharacterList
+                            character={item}
+                            onBtnDetailClick={() => {
+                                /* 1. Navigate to the Details route with params */
+                                navigation.navigate('Details', {
+                                    characterURL: `${item.url}`
+                                });
+                            }}
+                        />
                     )}
                     numColumns={2}
                     horizontal={false}

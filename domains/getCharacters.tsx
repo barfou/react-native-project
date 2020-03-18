@@ -10,11 +10,8 @@ type Info = {
 type Character = {
     id: number;
     name: string;
-    status: string;
-    species: string;
-    gender: string;
     image: string;
-    created: string;
+    url: string;
 };
 
 type Characters = {
@@ -22,13 +19,10 @@ type Characters = {
     results: Array<Character>;
 };
 
-const getCharacters = (page: number | string) =>
-    fetch(`https://rickandmortyapi.com/api/character/?page=${page}`, {
+const getCharacters = (search: string, page: number | string) =>
+    fetch(`https://rickandmortyapi.com/api/character/?name=${search}&page=${page}`, {
         headers: {Accept: 'application/json'},
     }).then<Characters>(res => {
-        if (!res.ok) {
-            throw new Error();
-        }
         return res.json();
     });
 

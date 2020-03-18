@@ -35,15 +35,16 @@ type Character = {
     created: string;
 };
 
-const DetailsPage = ({route}) => {
-    const {itemId} = route.params;
+// @ts-ignore
+const DetailsPage = ({navigation, route}) => {
+    const {characterURL} = route.params;
 
     const [character, setCharacter] = React.useState<Character>();
     const [error, setError] = React.useState(false);
 
     React.useEffect(() => {
-        if (itemId) {
-            getCharacter(itemId)
+        if (characterURL) {
+            getCharacter(characterURL)
                 .then(data => {
                     setCharacter(data);
                 })
@@ -51,16 +52,30 @@ const DetailsPage = ({route}) => {
                     setError(true);
                 });
         }
-    }, [itemId]);
+    }, [characterURL]);
 
-    return itemId && !error ? (
+    return characterURL && !error ? (
         <>
             <StatusBar barStyle="dark-content"/>
             <View style={styles.body}>
                 {character ? (
-                    <CharacterDetails character={character}/>
+                    <CharacterDetails
+                        character={character}
+                        onOriginClick={() => {
+                            /* 1. Navigate to the Details route with params */
+                            navigation.navigate('LocationDetails', {
+                                locationURL: `${character?.origin.url}`
+                            });
+                        }}
+                        onLocationClick={() => {
+                            /* 1. Navigate to the Details route with params */
+                            navigation.navigate('LocationDetails', {
+                                locationURL: `${character?.location.url}`
+                            });
+                        }}
+                    />
                 ) : (
-                    <Text>No character detail</Text>
+                    <Text>Getting infos, please wait...</Text>
                 )}
             </View>
         </>
