@@ -9,11 +9,11 @@ type Episode = {
     created: string;
 };
 
-const getEpisodes = (idList: string) =>
+const getMultipleEpisodes = (idList: string) =>
     fetch(`https://rickandmortyapi.com/api/episode/${idList}`, {
         headers: {Accept: 'application/json'},
     }).then<Array<Episode>>(res => {
         return res.json();
     });
 
-export default getEpisodes;
+export default getMultipleEpisodes;

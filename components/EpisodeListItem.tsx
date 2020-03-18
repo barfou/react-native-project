@@ -19,7 +19,16 @@ export type EpisodeistItemProps = {
 const EpisodeListItem: React.FC<EpisodeistItemProps> = props => {
     return (
         <TouchableOpacity style={styles.item}>
-                <Text style={styles.title}>{props.episode.name}</Text>
+            <View>
+                <Text style={styles.textLeft}>Episode :</Text>
+                <Text style={styles.textLeft}>Title :</Text>
+
+            </View>
+            <View>
+                <Text style={styles.textRight}>{props.episode.episode}</Text>
+                <Text style={styles.textRight}>{props.episode.name}</Text>
+            </View>
+
         </TouchableOpacity>
     );
 }
@@ -29,12 +38,17 @@ const styles = StyleSheet.create({
         marginVertical: 4,
         marginHorizontal: 8,
         padding: 10,
-        backgroundColor: '#ff9800'
+        backgroundColor: '#30333a',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderRadius: 8
     },
-    title: {
-        fontSize: 12,
-        alignSelf: 'center',
-        color: '#FFFFFF'
+    textLeft: {
+        color: '#DDDDDD',
+    },
+    textRight: {
+        color: '#ff9800',
+        alignSelf: 'flex-end'
     },
 });
 

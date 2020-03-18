@@ -5,7 +5,7 @@ import {
     Text,
     StatusBar,
     TouchableOpacity,
-    Image, FlatList,
+    Image, FlatList, ScrollView,
 } from 'react-native';
 
 import getLocation from "../domains/getLocation";
@@ -13,6 +13,8 @@ import getLocation from "../domains/getLocation";
 import LocationDetails from "../components/LocationDetails";
 import CharacterListItem from "../components/CharacterListItem";
 import getCharacter from "../domains/getCharacter";
+import getMultipleEpisodes from "../domains/getMultipleEpisodes";
+import getMultipleCharacters from "../domains/getMultipleCharacters";
 
 type Location = {
     id: number;
@@ -38,13 +40,19 @@ const DetailsLocationPage = ({navigation, route}) => {
     const [error, setError] = React.useState(false);
 
     const [characters, setCharacters] = React.useState<Array<Character>>([]);
-    const [table] = React.useState<Array<Character>>([]);
 
     React.useEffect(() => {
         if (locationURL) {
             getLocation(locationURL)
                 .then(data => {
                     setLocation(data);
+
+                    getMultipleCharacters(data.residents.map(item => item.split("/")[item.split("/").length-1]).toString())
+                        .then(charactersData => {
+                            setCharacters(characters.concat(charactersData));
+                            }
+                        )
+
                 })
                 .catch(() => {
                     setError(true);
@@ -53,15 +61,32 @@ const DetailsLocationPage = ({navigation, route}) => {
     }, [locationURL]);
 
     return locationURL && !error ? (
-        <View style={styles.body}>
+        <ScrollView style={styles.body}>
             {location ? (
-                <LocationDetails
-                    location={location}
-                />
+                <>
+                    <LocationDetails location={location}/>
+                    <Text style={{color: '#DDDDDD', margin: 10 ,paddingLeft: 10}}>Residents : </Text>
+                    <FlatList
+                        style={styles.flatList}
+                        data={characters}
+                        renderItem={({item}: { item: Character }) => (
+                        <CharacterListItem
+                            character={item}
+                            onItemClick={() => {
+                                /* 1. Navigate to the Details route with params */
+                                navigation.navigate('Details', {
+                                    characterURL: `${item.url}`
+                                });
+                            }}/>
+                        )}
+                        numColumns={2}
+                        horizontal={false}
+                    />
+                </>
             ) : (
                 <Text style={{alignSelf: 'center'}}>Getting infos, please wait...</Text>
             )}
-        </View>
+        </ScrollView>
     ) : (
         <View style={styles.body}>
             <Text>Error</Text>
@@ -71,6 +96,7 @@ const DetailsLocationPage = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
     body: {
+        backgroundColor: '#202329',
         flex: 1
     },
     flatList: {

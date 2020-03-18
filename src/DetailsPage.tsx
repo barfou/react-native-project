@@ -12,7 +12,7 @@ import {
 import getCharacter from '../domains/getCharacter';
 
 import CharacterDetails from '../components/CharacterDetails'
-import getEpisodes from "../domains/getEpisodes";
+import getMultipleEpisodes from "../domains/getMultipleEpisodes";
 import getCharacters from "../domains/getCharacters";
 import EpisodeListItem from "../components/EpisodeListItem";
 
@@ -65,7 +65,7 @@ const DetailsPage = ({navigation, route}) => {
                 .then(data => {
                     setCharacter(data);
 
-                    getEpisodes(data.episode.map(item => item.split("/")[item.split("/").length-1]).toString())
+                    getMultipleEpisodes(data.episode.map(item => item.split("/")[item.split("/").length-1]).toString())
                         .then(episodeData => {
                             setEpisodes(episodes.concat(episodeData));
                         }
