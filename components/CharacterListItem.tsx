@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {Button, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 type Character = {
     id: number;
@@ -11,19 +11,17 @@ const {height, width} = Dimensions.get('window');
 const itemWidth = (width - 50) / 2;
 const itemHeight = (height) / 4;
 
-export type CharacterListProps = {
+export type CharacterListItemProps = {
     character: Character;
-    onBtnDetailClick: () => void;
+    onItemClick: () => void;
 }
 
-const CharacterList: React.FC<CharacterListProps> = CharacterListProps => {
+const CharacterListItem: React.FC<CharacterListItemProps> = props => {
     return (
-        <TouchableOpacity onPress={CharacterListProps.onBtnDetailClick}>
-            <View style={styles.item}>
-                <Image style={styles.img} source={{uri: CharacterListProps.character.image}}/>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>{CharacterListProps.character.name}</Text>
-                </View>
+        <TouchableOpacity style={styles.item} onPress={props.onItemClick}>
+            <Image style={styles.img} source={{uri: props.character.image}}/>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>{props.character.name}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -59,4 +57,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CharacterList;
+export default CharacterListItem;

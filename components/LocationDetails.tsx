@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Dimensions, FlatList, Image, StyleSheet, Text, View} from "react-native";
-import CharacterList from "./CharacterList";
+import CharacterListItem from "./CharacterListItem";
 
 type Location = {
     id: number;

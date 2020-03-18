@@ -19,6 +19,7 @@ type Character = {
     origin: Origin;
     location: Location;
     image: string;
+    episode: [string];
     created: string;
     url: string;
 };
