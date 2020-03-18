@@ -20,7 +20,9 @@ type CharacterDetails = {
     origin: Origin;
     location: Location;
     image: string;
+    episode: string[]
     created: string;
+    url: string;
 };
 
 const {height, width} = Dimensions.get('window');
@@ -35,7 +37,7 @@ export type CharacterDetailsProps = {
 
 const CharacterDetails: React.FC<CharacterDetailsProps> = CharacterDetailsProps => {
     return (
-        <View style={styles.body}>
+        <View>
             <View>
                 <Image style={styles.img} source={{uri: CharacterDetailsProps.character.image}}/>
                 <View style={styles.firstInfosContainer}>
@@ -59,15 +61,24 @@ const CharacterDetails: React.FC<CharacterDetailsProps> = CharacterDetailsProps 
                 </View>
                 <View style={styles.containerWithBottomline}>
                     <Text style={styles.textLeft}>Origin :</Text>
-                    <TouchableOpacity onPress={CharacterDetailsProps.onLocationClick}>
-                        <Text style={styles.textRightClickable}>{CharacterDetailsProps.character.origin.name}</Text>
-                    </TouchableOpacity>
+                    {CharacterDetailsProps.character.origin.url ? (
+                        <TouchableOpacity onPress={CharacterDetailsProps.onOriginClick}>
+                            <Text style={styles.textRightClickable}>{CharacterDetailsProps.character.origin.name}</Text>
+                        </TouchableOpacity>
+                    ) : (
+                        <Text style={styles.textRight}>{CharacterDetailsProps.character.origin.name}</Text>
+                    )}
                 </View>
                 <View style={styles.containerWithBottomline}>
                     <Text style={styles.textLeft}>Last Location :</Text>
-                    <TouchableOpacity onPress={CharacterDetailsProps.onLocationClick}>
-                        <Text style={styles.textRightClickable}>{CharacterDetailsProps.character.location.name}</Text>
-                    </TouchableOpacity>
+                    {CharacterDetailsProps.character.location.url ? (
+                        <TouchableOpacity onPress={CharacterDetailsProps.onLocationClick}>
+                            <Text style={styles.textRightClickable}>{CharacterDetailsProps.character.location.name}</Text>
+                        </TouchableOpacity>
+                    ) : (
+                        <Text style={styles.textRight}>{CharacterDetailsProps.character.location.name}</Text>
+                    )}
+
                 </View>
             </View>
         </View>
@@ -75,10 +86,6 @@ const CharacterDetails: React.FC<CharacterDetailsProps> = CharacterDetailsProps 
 }
 
 const styles = StyleSheet.create({
-    body: {
-        backgroundColor: '#222222',
-        flex: 1
-    },
     img: {
         width: imgWidth,
         height: itemHeight,
@@ -95,7 +102,7 @@ const styles = StyleSheet.create({
     infosContainer: {
         backgroundColor: '#222222',
         padding: 10,
-        height: itemHeight
+        flex: 1
     },
     textFirstInfosName: {
         color: '#DDDDDD',

@@ -4,14 +4,17 @@ import {
     View,
     Text,
     StatusBar,
-    TouchableOpacity, Image,
+    SafeAreaView,
+    FlatList, ScrollView,
 } from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 import getCharacter from '../domains/getCharacter';
 
 import CharacterDetails from '../components/CharacterDetails'
+import getEpisodes from "../domains/getEpisodes";
+import getCharacters from "../domains/getCharacters";
+import EpisodeListItem from "../components/EpisodeListItem";
 
 type Origin = {
     name: string;
@@ -32,8 +35,20 @@ type Character = {
     origin: Origin;
     location: Location;
     image: string;
+    episode: string[];
+    created: string;
+    url: string;
+};
+
+type Episode = {
+    id: number;
+    name: string;
+    air_date: string;
+    episode: string;
+    url: string;
     created: string;
 };
+
 
 // @ts-ignore
 const DetailsPage = ({navigation, route}) => {
@@ -42,11 +57,20 @@ const DetailsPage = ({navigation, route}) => {
     const [character, setCharacter] = React.useState<Character>();
     const [error, setError] = React.useState(false);
 
+    const [episodes, setEpisodes] = React.useState<Array<Episode>>([]);
+
     React.useEffect(() => {
         if (characterURL) {
             getCharacter(characterURL)
                 .then(data => {
                     setCharacter(data);
+
+                    getEpisodes(data.episode.map(item => item.split("/")[item.split("/").length-1]).toString())
+                        .then(episodeData => {
+                            setEpisodes(episodes.concat(episodeData));
+                        }
+                    )
+
                 })
                 .catch(() => {
                     setError(true);
@@ -57,27 +81,36 @@ const DetailsPage = ({navigation, route}) => {
     return characterURL && !error ? (
         <>
             <StatusBar barStyle="dark-content"/>
-            <View style={styles.body}>
+            <ScrollView style={styles.body}>
                 {character ? (
-                    <CharacterDetails
-                        character={character}
-                        onOriginClick={() => {
-                            /* 1. Navigate to the Details route with params */
-                            navigation.navigate('LocationDetails', {
-                                locationURL: `${character?.origin.url}`
-                            });
-                        }}
-                        onLocationClick={() => {
-                            /* 1. Navigate to the Details route with params */
-                            navigation.navigate('LocationDetails', {
-                                locationURL: `${character?.location.url}`
-                            });
-                        }}
-                    />
+                    <>
+                        <CharacterDetails
+                            character={character}
+                            onOriginClick={() => {
+                                /* 1. Navigate to the Details route with params */
+                                navigation.navigate('LocationDetails', {
+                                    locationURL: `${character?.origin.url}`
+                                });
+                            }}
+                            onLocationClick={() => {
+                                /* 1. Navigate to the Details route with params */
+                                navigation.navigate('LocationDetails', {
+                                    locationURL: `${character?.location.url}`
+                                });
+                            }}
+                        />
+                        <Text style={{color: '#DDDDDD', margin: 10 ,paddingLeft: 10}}>Episodes : </Text>
+                        <FlatList
+                            data={episodes}
+                            renderItem={({ item }: {item: Episode}) => (
+                                <EpisodeListItem episode={item}/>
+                            )}
+                        />
+                    </>
                 ) : (
                     <Text>Getting infos, please wait...</Text>
                 )}
-            </View>
+            </ScrollView>
         </>
     ) : (
         <View style={styles.body}>
@@ -88,7 +121,11 @@ const DetailsPage = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
     body: {
-        alignItems: 'center',
+        backgroundColor: '#202329',
+        flex: 1,
+    },
+    flatList: {
+        margin: 10,
         flex: 1
     },
 });

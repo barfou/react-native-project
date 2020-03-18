@@ -7,22 +7,19 @@ type Episode = {
     name: string;
     air_date: string;
     episode: string;
-    characters: string[];
     url: string;
     created: string;
 };
 
-export type CharacterListItemProps = {
+export type EpisodeistItemProps = {
     episode: Episode;
-    onItemClick: () => void;
+    //onItemClick: () => void;
 }
 
-const EpisodeListItem: React.FC<CharacterListItemProps> = props => {
+const EpisodeListItem: React.FC<EpisodeistItemProps> = props => {
     return (
-        <TouchableOpacity style={styles.item} onPress={props.onItemClick}>
-            <View style={styles.titleContainer}>
+        <TouchableOpacity style={styles.item}>
                 <Text style={styles.title}>{props.episode.name}</Text>
-            </View>
         </TouchableOpacity>
     );
 }
@@ -31,17 +28,8 @@ const styles = StyleSheet.create({
     item: {
         marginVertical: 4,
         marginHorizontal: 8,
-    },
-    titleContainer: {
-        backgroundColor: '#222222',
         padding: 10,
-        opacity: 0.75,
-        borderBottomLeftRadius: 4,
-        borderBottomRightRadius: 4,
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0
+        backgroundColor: '#ff9800'
     },
     title: {
         fontSize: 12,

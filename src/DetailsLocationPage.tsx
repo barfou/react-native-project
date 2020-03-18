@@ -11,7 +11,7 @@ import {
 import getLocation from "../domains/getLocation";
 
 import LocationDetails from "../components/LocationDetails";
-import CharacterList from "../components/CharacterList";
+import CharacterListItem from "../components/CharacterListItem";
 import getCharacter from "../domains/getCharacter";
 
 type Location = {

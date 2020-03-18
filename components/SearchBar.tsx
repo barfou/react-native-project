@@ -6,7 +6,7 @@ export type SearchBarProps = {
     onChangeText: (str: string) => void;
 }
 
-const CharacterList: React.FC<SearchBarProps> = SearchBarProps => {
+const SearchBar: React.FC<SearchBarProps> = SearchBarProps => {
     return (
         <View style={styles.itemCointainer}>
             <TextInput style={styles.searchBar} onChangeText={SearchBarProps.onChangeText} inlineImageLeft="search" inlineImagePadding={10}/>
@@ -26,4 +26,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default CharacterList;
+export default SearchBar;
