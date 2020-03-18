@@ -15,13 +15,16 @@ import CharacterListItem from "../components/CharacterListItem";
 import getCharacter from "../domains/getCharacter";
 import getMultipleEpisodes from "../domains/getMultipleEpisodes";
 import getMultipleCharacters from "../domains/getMultipleCharacters";
+import getEpisode from "../domains/getEpisode";
+import EpisodeDetails from "../components/EpisodeDetails";
 
-type Location = {
+type Episode = {
     id: number;
     name: string;
-    type: string;
-    dimension: string;
-    residents: [string];
+    air_date: string;
+    episode: string;
+    characters: string[]
+    url: string;
     created: string;
 };
 
@@ -33,21 +36,21 @@ type Character = {
 };
 
 // @ts-ignore
-const DetailsLocationPage = ({navigation, route}) => {
-    const {locationURL} = route.params;
+const DetailsEpisodePage = ({navigation, route}) => {
+    const {episodeURL} = route.params;
 
-    const [location, setLocation] = React.useState<Location>();
+    const [episode, setEpisode] = React.useState<Episode>();
     const [error, setError] = React.useState(false);
 
     const [characters, setCharacters] = React.useState<Array<Character>>([]);
 
     React.useEffect(() => {
-        if (locationURL) {
-            getLocation(locationURL)
+        if (episodeURL) {
+            getEpisode(episodeURL)
                 .then(data => {
-                    setLocation(data);
+                    setEpisode(data);
 
-                    getMultipleCharacters(data.residents.map(item => item.split("/")[item.split("/").length-1]).toString())
+                    getMultipleCharacters(data.characters.map(item => item.split("/")[item.split("/").length-1]).toString())
                         .then(charactersData => {
                             setCharacters(characters.concat(charactersData));
                             }
@@ -58,14 +61,14 @@ const DetailsLocationPage = ({navigation, route}) => {
                     setError(true);
                 });
         }
-    }, [locationURL]);
+    }, [episodeURL]);
 
-    return locationURL && !error ? (
+    return episodeURL && !error ? (
         <ScrollView style={styles.body}>
-            {location ? (
+            {episode ? (
                 <>
-                    <LocationDetails location={location}/>
-                    <Text style={{color: '#DDDDDD', margin: 10 ,paddingLeft: 10}}>Residents ({characters.length}): </Text>
+                    <EpisodeDetails episode={episode}/>
+                    <Text style={{color: '#DDDDDD', margin: 10 ,paddingLeft: 10}}>Characters ({characters.length}) : </Text>
                     <FlatList
                         style={styles.flatList}
                         data={characters}
@@ -104,4 +107,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DetailsLocationPage;
+export default DetailsEpisodePage;

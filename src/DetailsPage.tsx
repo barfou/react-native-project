@@ -67,7 +67,11 @@ const DetailsPage = ({navigation, route}) => {
 
                     getMultipleEpisodes(data.episode.map(item => item.split("/")[item.split("/").length-1]).toString())
                         .then(episodeData => {
-                            setEpisodes(episodes.concat(episodeData));
+                            episodeData.length ? (
+                                setEpisodes(episodeData)
+                            ) : (
+                                setEpisodes([episodeData])
+                            )
                         }
                     )
 
@@ -88,22 +92,30 @@ const DetailsPage = ({navigation, route}) => {
                             character={character}
                             onOriginClick={() => {
                                 /* 1. Navigate to the Details route with params */
-                                navigation.navigate('LocationDetails', {
+                                navigation.navigate('Location Details', {
                                     locationURL: `${character?.origin.url}`
                                 });
                             }}
                             onLocationClick={() => {
                                 /* 1. Navigate to the Details route with params */
-                                navigation.navigate('LocationDetails', {
+                                navigation.navigate('Location Details', {
                                     locationURL: `${character?.location.url}`
                                 });
                             }}
                         />
-                        <Text style={{color: '#DDDDDD', margin: 10 ,paddingLeft: 10}}>Episodes : </Text>
+                        <Text style={{color: '#DDDDDD', margin: 10 ,paddingLeft: 10}}>Episodes ({episodes.length}) :</Text>
                         <FlatList
                             data={episodes}
                             renderItem={({ item }: {item: Episode}) => (
-                                <EpisodeListItem episode={item}/>
+                                <EpisodeListItem
+                                    episode={item}
+                                    onItemClick = {() => {
+                                        /* 1. Navigate to the Details route with params */
+                                        navigation.navigate('Episode Details', {
+                                            episodeURL: `${item.url}`
+                                        })
+                                    }}
+                                />
                             )}
                         />
                     </>

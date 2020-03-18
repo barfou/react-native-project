@@ -13,12 +13,12 @@ type Episode = {
 
 export type EpisodeistItemProps = {
     episode: Episode;
-    //onItemClick: () => void;
+    onItemClick: () => void;
 }
 
 const EpisodeListItem: React.FC<EpisodeistItemProps> = props => {
     return (
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity style={styles.item} onPress={props.onItemClick}>
             <View>
                 <Text style={styles.textLeft}>Episode :</Text>
                 <Text style={styles.textLeft}>Title :</Text>
