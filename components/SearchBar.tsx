@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         borderRadius: 8,
         paddingHorizontal: 10
-    }
+    },
 });
 
 export default SearchBar;

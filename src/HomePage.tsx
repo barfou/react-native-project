@@ -3,13 +3,19 @@ import {
     FlatList,
     SafeAreaView,
     StatusBar,
-    StyleSheet,
+    StyleSheet, Text,
 } from "react-native";
+import { SearchBar } from 'react-native-elements';
 
-import SearchBar from "../components/SearchBar";
 import getCharacters from "../domains/getCharacters";
 import CharacterListItem from "../components/CharacterListItem";
 
+type Info = {
+    count: number;
+    pages: number;
+    next: string;
+    prev: string;
+};
 
 type Character = {
     id: number;
@@ -20,6 +26,7 @@ type Character = {
 
 // @ts-ignore
 const HomePage = ({navigation}) => {
+    const [info, setInfo] = React.useState<Info>();
     const [characters, setCharacters] = React.useState<Array<Character>>([]);
     const [page, setPage] = React.useState(1);
     const [search, setSearch] = React.useState('');
@@ -29,6 +36,7 @@ const HomePage = ({navigation}) => {
         getCharacters(search, page)
             .then(data => {
                 if (!cancel) {
+                    setInfo(data.info);
                     setCharacters(characters?.concat(data.results));
                 }
             });
@@ -42,31 +50,43 @@ const HomePage = ({navigation}) => {
             <StatusBar barStyle="dark-content"/>
             <SafeAreaView style={styles.body}>
                 <SearchBar
-                    onChangeText={str => {
+                    onChangeText = {str => {
                         setSearch(str), setPage(1), setCharacters([]);
                     }}
+                    value = {search}
+                    placeholder = "Type here..."
                 />
-                <FlatList
-                    style={styles.flatList}
-                    onEndReached={() => {
-                        {setPage(page + 1)}
-                    }}
-                    onEndReachedThreshold={0.5}
-                    data={characters}
-                    renderItem={({item}: { item: Character }) => (
-                        <CharacterListItem
-                            character={item}
-                            onItemClick={() => {
-                                /* 1. Navigate to the Details route with params */
-                                navigation.navigate('Details', {
-                                    characterURL: `${item.url}`
-                                });
-                            }}
-                        />
-                    )}
-                    numColumns={2}
-                    horizontal={false}
-                />
+                {
+                characters && info ? (
+                    <FlatList
+                        style={styles.flatList}
+                        onEndReached={() => {
+                            {
+                                if(info?.next != "") {
+                                    setPage(page + 1);
+                                }
+                            }
+                        }}
+                        onEndReachedThreshold={0.8}
+                        data={characters}
+                        renderItem={({item}: { item: Character }) => (
+                            <CharacterListItem
+                                key={item.id}
+                                character={item}
+                                onItemClick={() => {
+                                    /* 1. Navigate to the Details route with params */
+                                    navigation.navigate('Details', {
+                                        characterURL: `${item.url}`
+                                    });
+                                }}
+                            />
+                        )}
+                        numColumns={2}
+                        horizontal={false}
+                    />
+                ) : (
+                    <Text style={styles.message}>Sorry no characters for this search...</Text>
+                )}
             </SafeAreaView>
         </>
     );
@@ -80,6 +100,10 @@ const styles = StyleSheet.create({
     flatList: {
         margin: 10,
     },
+    message: {
+        color: 'white',
+        alignSelf: 'center'
+    }
 });
 
 export default HomePage;

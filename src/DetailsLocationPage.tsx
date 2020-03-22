@@ -5,7 +5,7 @@ import {
     Text,
     StatusBar,
     TouchableOpacity,
-    Image, FlatList, ScrollView,
+    Image, FlatList, ScrollView, Dimensions,
 } from 'react-native';
 
 import getLocation from "../domains/getLocation";
@@ -31,6 +31,8 @@ type Character = {
     image: string;
     url: string;
 };
+
+const {height, width} = Dimensions.get('window');
 
 // @ts-ignore
 const DetailsLocationPage = ({navigation, route}) => {
@@ -65,26 +67,24 @@ const DetailsLocationPage = ({navigation, route}) => {
             {location ? (
                 <>
                     <LocationDetails location={location}/>
-                    <Text style={{color: '#DDDDDD', margin: 10 ,paddingLeft: 10}}>Residents ({characters.length}): </Text>
-                    <FlatList
-                        style={styles.flatList}
-                        data={characters}
-                        renderItem={({item}: { item: Character }) => (
-                        <CharacterListItem
-                            character={item}
-                            onItemClick={() => {
-                                /* 1. Navigate to the Details route with params */
-                                navigation.navigate('Details', {
-                                    characterURL: `${item.url}`
-                                });
-                            }}/>
+                    <Text style={{color: '#DDDDDD', margin: 10 ,paddingLeft: 10}}>Residents ({characters.length}) : </Text>
+                    <View style={styles.list}>
+                        {characters.map(item =>
+                            <CharacterListItem
+                                key={item.id}
+                                character={item}
+                                onItemClick={() => {
+                                    /* 1. Navigate to the Details route with params */
+                                    navigation.navigate('Details', {
+                                        characterURL: `${item.url}`
+                                    });
+                                }}
+                            />
                         )}
-                        numColumns={2}
-                        horizontal={false}
-                    />
+                    </View>
                 </>
             ) : (
-                <Text style={{alignSelf: 'center'}}>Getting infos, please wait...</Text>
+                <Text style={styles.message}>Getting infos, please wait...</Text>
             )}
         </ScrollView>
     ) : (
@@ -99,9 +99,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#202329',
         flex: 1
     },
-    flatList: {
-        margin: 10,
+    list: {
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        justifyContent: 'center'
     },
+    message: {
+        color: 'white',
+        alignSelf: 'center'
+    }
 });
 
 export default DetailsLocationPage;

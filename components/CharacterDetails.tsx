@@ -35,7 +35,11 @@ export type CharacterDetailsProps = {
     onOriginClick: () => void;
 }
 
+
 const CharacterDetails: React.FC<CharacterDetailsProps> = CharacterDetailsProps => {
+    const createdDate: Date = new Date(CharacterDetailsProps.character.created.split("T")[0]);
+    const createdTabString: String[] = createdDate.toDateString().split(" ");
+    const createdString: String = createdTabString[1] + " " +  createdTabString[2] + ", " + createdTabString[3]
     return (
         <View>
             <View>
@@ -43,7 +47,7 @@ const CharacterDetails: React.FC<CharacterDetailsProps> = CharacterDetailsProps 
                 <View style={styles.firstInfosContainer}>
                     <Text style={styles.textFirstInfosName}>{CharacterDetailsProps.character.name}</Text>
                     <Text style={styles.textFirstInfos}>Id: {CharacterDetailsProps.character.id}</Text>
-                    <Text style={styles.textFirstInfos}>Created : {CharacterDetailsProps.character.created}</Text>
+                    <Text style={styles.textFirstInfos}>Created : {createdString}</Text>
                 </View>
             </View>
             <View style={styles.infosContainer}>

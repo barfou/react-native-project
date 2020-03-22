@@ -69,25 +69,23 @@ const DetailsEpisodePage = ({navigation, route}) => {
                 <>
                     <EpisodeDetails episode={episode}/>
                     <Text style={{color: '#DDDDDD', margin: 10 ,paddingLeft: 10}}>Characters ({characters.length}) : </Text>
-                    <FlatList
-                        style={styles.flatList}
-                        data={characters}
-                        renderItem={({item}: { item: Character }) => (
-                        <CharacterListItem
-                            character={item}
-                            onItemClick={() => {
-                                /* 1. Navigate to the Details route with params */
-                                navigation.navigate('Details', {
-                                    characterURL: `${item.url}`
-                                });
-                            }}/>
+                    <View style={styles.list}>
+                        {characters.map(item =>
+                            <CharacterListItem
+                                key={item.id}
+                                character={item}
+                                onItemClick={() => {
+                                    /* 1. Navigate to the Details route with params */
+                                    navigation.navigate('Details', {
+                                        characterURL: `${item.url}`
+                                    });
+                                }}
+                            />
                         )}
-                        numColumns={2}
-                        horizontal={false}
-                    />
+                    </View>
                 </>
             ) : (
-                <Text style={{alignSelf: 'center'}}>Getting infos, please wait...</Text>
+                <Text style={styles.message}>Getting infos, please wait...</Text>
             )}
         </ScrollView>
     ) : (
@@ -102,9 +100,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#202329',
         flex: 1
     },
-    flatList: {
-        margin: 10,
+    list: {
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        justifyContent: 'center'
     },
+    message: {
+        color: 'white',
+        alignSelf: 'center'
+    }
 });
 
 export default DetailsEpisodePage;

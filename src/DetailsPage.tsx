@@ -4,16 +4,13 @@ import {
     View,
     Text,
     StatusBar,
-    SafeAreaView,
-    FlatList, ScrollView,
+    ScrollView,
 } from 'react-native';
 
 
 import getCharacter from '../domains/getCharacter';
-
 import CharacterDetails from '../components/CharacterDetails'
 import getMultipleEpisodes from "../domains/getMultipleEpisodes";
-import getCharacters from "../domains/getCharacters";
 import EpisodeListItem from "../components/EpisodeListItem";
 
 type Origin = {
@@ -104,23 +101,21 @@ const DetailsPage = ({navigation, route}) => {
                             }}
                         />
                         <Text style={{color: '#DDDDDD', margin: 10 ,paddingLeft: 10}}>Episodes ({episodes.length}) :</Text>
-                        <FlatList
-                            data={episodes}
-                            renderItem={({ item }: {item: Episode}) => (
-                                <EpisodeListItem
-                                    episode={item}
-                                    onItemClick = {() => {
-                                        /* 1. Navigate to the Details route with params */
-                                        navigation.navigate('Episode Details', {
-                                            episodeURL: `${item.url}`
-                                        })
-                                    }}
-                                />
-                            )}
-                        />
+                        {episodes.map(item =>
+                            <EpisodeListItem
+                                key={item.id}
+                                episode={item}
+                                onItemClick = {() => {
+                                    /* 1. Navigate to the Details route with params */
+                                    navigation.navigate('Episode Details', {
+                                        episodeURL: `${item.url}`
+                                    })
+                                }}
+                            />
+                        )}
                     </>
                 ) : (
-                    <Text>Getting infos, please wait...</Text>
+                    <Text style={styles.message}>Getting infos, please wait...</Text>
                 )}
             </ScrollView>
         </>
@@ -136,10 +131,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#202329',
         flex: 1,
     },
-    flatList: {
-        margin: 10,
-        flex: 1
-    },
+    message: {
+        color: 'white',
+        alignSelf: 'center'
+    }
 });
 
 export default DetailsPage;

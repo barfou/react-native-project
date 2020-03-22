@@ -18,7 +18,7 @@ export type CharacterListItemProps = {
 
 const CharacterListItem: React.FC<CharacterListItemProps> = props => {
     return (
-        <TouchableOpacity style={styles.item} onPress={props.onItemClick}>
+        <TouchableOpacity style={styles.item} onPress={props.onItemClick} >
             <Image style={styles.img} source={{uri: props.character.image}}/>
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>{props.character.name}</Text>
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#222222',
         padding: 10,
         opacity: 0.75,
-        borderBottomLeftRadius: 4,
-        borderBottomRightRadius: 4,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
         position: 'absolute',
         bottom: 0,
         left: 0,
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     img: {
         width: itemWidth,
         height: itemHeight,
-        borderRadius: 4
+        borderRadius: 8
     },
 });
 
